@@ -10,7 +10,7 @@
         <el-input v-model="title" placeholder="请输入文章标题"></el-input>
       </div>
       <div >
-        <p class="sub-title">摘要</p>
+        <p>摘要</p>
         <el-input v-model="summary" placeholder="输入文章摘要" />
       </div>
     </div>
@@ -27,8 +27,12 @@
       @imgAdd="mdImgUpload"
       @change="change"
       @imgDel="mdImgDel"
+      @save="save(1)"
     />
+<!--    上传封面的dialog-->
     <img-upload :visible="imgUploadVisible" @dialogClose="dialogClose" @uploadSuccess="coverUploadSuccess" />
+
+<!--    预览封面-->
     <el-dialog
       :modal="false"
       title="预览封面"
