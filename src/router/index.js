@@ -124,6 +124,26 @@ export const asyncRoutes = [
       }
     }]
   },
+  {
+    path: '/art-manage',
+    component: Layout,
+    redirect: '',
+    meta:{
+      title: '文章管理',
+      icon: 'user',
+      roles: [1]
+    },
+    children: [{
+      path: 'edit',
+      name: 'Edit',
+      component: () => import('@/views/article-manage/edit'),
+      meta: {
+        title: '文章编辑',
+        icon: 'user',
+        roles: [1]
+      }
+    }]
+  },
 
   // {
   //   path: '/nested',
