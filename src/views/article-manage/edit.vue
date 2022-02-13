@@ -9,7 +9,7 @@
         <p>标题</p>
         <el-input v-model="title" placeholder="请输入文章标题"></el-input>
       </div>
-      <div >
+      <div>
         <p>摘要</p>
         <el-input v-model="summary" placeholder="输入文章摘要" />
       </div>
@@ -57,7 +57,7 @@
 import { mavonEditor } from 'mavon-editor'
 import {deleteFile, uploadImg} from "@/api/file";
 import ImgUpload from "@/views/article-manage/imgUpload";
-import {saveArticle} from "@/api/article";
+import {getArticleDetail, saveArticle} from "@/api/article";
 export default {
   data(){
     return{
@@ -71,13 +71,33 @@ export default {
       htmlContent: '',
     }
   },
+  mounted() {
+    this.id = this.$route.query.id || null
+    this.loadEdit()
+  },
   components:{
     ImgUpload,
     mavonEditor
   },
   methods: {
+    loadEdit() {
+      if (this.id){
+        const params = {id:this.id}
+        getArticleDetail(params).then(
+          res => {
+            this.title = res.data.title
+            this.summary = res.data.summary
+            this.cover = res.data.cover
+            this.content = res.data.content
+            this.htmlContent = res.data.htmlContent
+
+          }
+        )
+      }
+    },
     save(status){
       const data = {
+        id: this.id,
         title: this.title,
         cover: this.cover,
         htmlContent: this.htmlContent,

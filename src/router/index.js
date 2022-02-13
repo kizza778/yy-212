@@ -142,7 +142,18 @@ export const asyncRoutes = [
         icon: 'user',
         roles: [1]
       }
-    }]
+    },
+      {
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/article-manage/list'),
+        meta: {
+          title: '文章列表',
+          icon: 'user',
+          roles: [1]
+        }
+      }
+    ]
   },
 
   // {
