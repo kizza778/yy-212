@@ -4,6 +4,26 @@
       <el-button class="button-margin" v-if="!cover" size="small" type="primary" icon="el-icon-upload" @click="coverUploadClick">上传封面</el-button>
       <el-button class="button-margin" v-else type="primary" size="small" icon="el-icon-picture" @click="coverPreview">预览封面</el-button>
     </div>
+    <div>
+      <p>选择分类</p>
+      <el-select v-model="categories" multiple placeholder="请选择">
+        <el-option
+          v-for="item in categoriesOption"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
+      </el-select>
+      <p>选择标签</p>
+      <el-select v-model="tags" multiple placeholder="请选择标签">
+        <el-option
+          v-for="item in tagsOption"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
+      </el-select>
+    </div>
     <div class="row-box">
       <div>
         <p>标题</p>
@@ -57,13 +77,20 @@
 import { mavonEditor } from 'mavon-editor'
 import {deleteFile, uploadImg} from "@/api/file";
 import ImgUpload from "@/views/article-manage/imgUpload";
-import {saveArticle} from "@/api/article";
+import {getArticleDetail, saveArticle} from "@/api/article";
+import {getAllCategory} from "@/api/category";
+import {getAllTag} from "@/api/tag";
 export default {
   data(){
     return{
+      categoriesOption: [],
+      tagsOption: [],
       id: '',
       title: '',
       summary: '',
+      // 已选择的
+      categories: [],
+      tags: [],
       imgUploadVisible: false,
       coverVisible: false,
       cover: '',
@@ -75,16 +102,61 @@ export default {
     ImgUpload,
     mavonEditor
   },
+  mounted() {
+    this.id = this.$route.query.id
+    this.loadEdit()
+    this.loadCategories()
+    this.loadTags()
+  },
   methods: {
+    loadTags() {
+      getAllTag().then(
+        res => {
+          this.tagsOption = res.data
+        },
+        error => {
+          console.log(error)
+        }
+      )
+    },
+    loadCategories(){
+      getAllCategory().then(
+        res => {
+          this.categoriesOption = res.data
+        },
+        error => {
+          console.log(error)
+        }
+      )
+    },
+    loadEdit(){
+      if (this.id){
+        const params = {id:this.id}
+        getArticleDetail(params).then(
+          res => {
+            this.title = res.data.title
+            this.summary = res.data.summary
+            this.cover = res.data.cover
+            this.content = res.data.content
+            this.htmlContent = res.data.htmlContent
+            this.categories = res.data.categories
+            this.tags = res.data.tags
+          }
+        )
+      }
+    },
     save(status){
       const data = {
+        id: this.id,
         title: this.title,
         cover: this.cover,
         htmlContent: this.htmlContent,
         original: true,
         status: status,
         summary: this.summary,
-        content: this.content
+        content: this.content,
+        categories: this.categories,
+        tags: this.tags
       }
       saveArticle(data).then(
         res => {
@@ -141,7 +213,7 @@ export default {
       this.imgUploadVisible = false
     },
     coverUploadClick(){
-      this.imgUploadVisible = true
+      this.imgUploadVisible = truef
     },
     mdImgUpload(pos,file){
       var newData = new FormData();
