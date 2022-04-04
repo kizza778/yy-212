@@ -16,7 +16,7 @@
             class="code-btn"
             slot="suffix"
             @click="sendCode"
-            >获取验证码</span
+          >获取验证码</span
           >
           <el-button
             v-show="codeCount"
@@ -31,14 +31,14 @@
       </el-form-item>
 
       <el-form-item
-      label="" size="normal"
+        label="" size="normal"
       >
         <el-button
-        type="primary"
-        size="default"
-        :loading="loading"
-        @click="codeLogin"
-        style="width:100%"
+          type="primary"
+          size="default"
+          :loading="loading"
+          @click="codeLogin"
+          style="width:100%"
         >登录</el-button>
       </el-form-item>
     </el-form>
@@ -56,7 +56,7 @@ export default {
         code: "",
       },
       codeCount: "",
-    timer:null,
+      timer:null,
       loading:false,
     };
   },
