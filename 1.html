@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+
+</body>
+<script>
+  function fn(num, coinStr){
+    let coinArr = coinStr.split(' ').map(Number).slice(1);
+    let fnArr = [];
+    fnArr[0] = 0;
+    for(let i = 1; i<= num; i++){
+      for(let c = 0; c<coinArr.length; c++){
+        if(coinArr[c] <= i){
+          fnArr[i] = Math.min(fnArr[i] || Infinity, fnArr[i-coinArr[c]]+1) || Infinity
+        }
+      }
+    }
+    return fnArr[num] === Infinity ? 'Impossible' : fnArr[num];
+  }
+
+  console.log(fn(65,'50 30 20 5'))
+</script>
+</html>
