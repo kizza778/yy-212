@@ -109,6 +109,7 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
+
   {
     path: '/tag-manage',
     component: Layout,
@@ -123,6 +124,47 @@ export const asyncRoutes = [
         roles: [1, 2]
       }
     }]
+  },
+  {
+    path: '/pass-audit',
+    component: Layout,
+    redirect: 'NoRedirect',
+    meta:{
+      title: '通行审核',
+      icon: 'user',
+      roles: [1]
+    },
+    children: [{
+      path: 'out',
+      name: 'Out',
+      component: () => import('@/views/travelApply/out'),
+      meta: {
+        title: '出行申请审核',
+        icon: 'user',
+        roles: [1]
+      }
+    },
+      {
+        path:'back',
+        name: 'Back',
+        component: () => import('@/views/travelApply/back'),
+        meta: {
+          title: '回家申请审核',
+          icon: 'user',
+          roles: [1]
+        }
+      },
+      {
+        path:'details',
+        name: 'Details',
+        hidden: true,
+        component: () => import('@/views/travelApply/details'),
+        meta: {
+          title: '审核页面',
+          icon: 'user',
+          roles: [1]
+        }
+      }]
   },
   {
     path: '/art-manage',

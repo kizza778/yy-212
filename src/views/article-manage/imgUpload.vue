@@ -92,13 +92,13 @@ export default {
         file.type === 'image/jpeg' ||
         file.type === 'image/png' ||
         file.type === 'image/jpg'
-      const isLt800KB = file.size / 1024 < 800
+      const isLt800KB = file.size / 1024 < 8000
       if (!isImg) {
         this.$message.error('文件格式不正确')
         this.loading = false
       }
       if (!isLt800KB) {
-        this.$message.error('文件大小不能大于500KB')
+        this.$message.error('文件大小不能大于8000KB')
         this.loading = false
       }
       return isImg && isLt800KB

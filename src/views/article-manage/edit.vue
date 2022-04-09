@@ -5,25 +5,35 @@
       <el-button class="button-margin" v-else type="primary" size="small" icon="el-icon-picture" @click="coverPreview">预览封面</el-button>
     </div>
     <div>
-      <p>选择分类</p>
-      <el-select v-model="categories" multiple placeholder="请选择">
-        <el-option
-          v-for="item in categoriesOption"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
-        ></el-option>
-      </el-select>
-      <p>选择标签</p>
-      <el-select v-model="tags" multiple placeholder="请选择标签">
-        <el-option
-          v-for="item in tagsOption"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
-        ></el-option>
-      </el-select>
+      <el-switch
+        style="display: block"
+        v-model="original"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        active-text="置顶"
+        inactive-text="不置顶">
+      </el-switch>
     </div>
+<!--    <div>-->
+<!--      <p>选择分类</p>-->
+<!--      <el-select v-model="categories" multiple placeholder="请选择">-->
+<!--        <el-option-->
+<!--          v-for="item in categoriesOption"-->
+<!--          :key="item.id"-->
+<!--          :label="item.name"-->
+<!--          :value="item.id"-->
+<!--        ></el-option>-->
+<!--      </el-select>-->
+<!--      <p>选择标签</p>-->
+<!--      <el-select v-model="tags" multiple placeholder="请选择标签">-->
+<!--        <el-option-->
+<!--          v-for="item in tagsOption"-->
+<!--          :key="item.id"-->
+<!--          :label="item.name"-->
+<!--          :value="item.id"-->
+<!--        ></el-option>-->
+<!--      </el-select>-->
+<!--    </div>-->
     <div class="row-box">
       <div>
         <p>标题</p>
@@ -91,6 +101,7 @@ export default {
       // 已选择的
       categories: [],
       tags: [],
+      original:false,
       imgUploadVisible: false,
       coverVisible: false,
       cover: '',
@@ -139,8 +150,8 @@ export default {
             this.cover = res.data.cover
             this.content = res.data.content
             this.htmlContent = res.data.htmlContent
-            this.categories = res.data.categories
-            this.tags = res.data.tags
+            // this.categories = res.data.categories
+            this.original = res.data.original
           }
         )
       }
@@ -151,12 +162,12 @@ export default {
         title: this.title,
         cover: this.cover,
         htmlContent: this.htmlContent,
-        original: true,
+        original: this.original,
         status: status,
         summary: this.summary,
         content: this.content,
-        categories: this.categories,
-        tags: this.tags
+        // categories: this.categories,
+        // tags: this.tags
       }
       saveArticle(data).then(
         res => {
@@ -213,7 +224,7 @@ export default {
       this.imgUploadVisible = false
     },
     coverUploadClick(){
-      this.imgUploadVisible = truef
+      this.imgUploadVisible = true
     },
     mdImgUpload(pos,file){
       var newData = new FormData();
