@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <el-table v-loaing="loading" :data="articleList" border style="width:100%" siz="medium">
+  <el-table :data="articleList" border style="width:100%" siz="medium">
     <el-table-column prop="id" label="ID" width="110" align="center" />
     <el-table-column prop="title" label="标题" width="220" align="center" />
     <el-table-column label="操作" fixed="right" min-width="230">

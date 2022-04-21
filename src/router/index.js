@@ -49,7 +49,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: {title: 'Dashboard', icon: 'dashboard'}
     }]
   },
 
@@ -63,8 +63,8 @@ export const constantRoutes = [
       component: () => import('@/views/user/index'),
       meta: {
         title: '个人信息',
-        icon:'user',
-        roles:[0,1,2]
+        icon: 'user',
+        roles: [0, 1, 2]
       }
     }]
   }
@@ -129,7 +129,7 @@ export const asyncRoutes = [
     path: '/pass-audit',
     component: Layout,
     redirect: 'NoRedirect',
-    meta:{
+    meta: {
       title: '通行审核',
       icon: 'user',
       roles: [1]
@@ -145,7 +145,7 @@ export const asyncRoutes = [
       }
     },
       {
-        path:'back',
+        path: 'back',
         name: 'Back',
         component: () => import('@/views/travelApply/back'),
         meta: {
@@ -155,7 +155,7 @@ export const asyncRoutes = [
         }
       },
       {
-        path:'details',
+        path: 'details',
         name: 'Details',
         hidden: true,
         component: () => import('@/views/travelApply/details'),
@@ -167,10 +167,91 @@ export const asyncRoutes = [
       }]
   },
   {
+    path: '/segregation',
+    component: Layout,
+    redirect: 'NoRedirect',
+    meta: {
+      title: '风险地区隔离政策管理',
+      icon: 'user',
+      roles: [1]
+    },
+    children: [{
+      path: 'add',
+      name: 'Add',
+      component: () => import('@/views/segregation/add'),
+      meta: {
+        title: '添加隔离政策',
+        icon: 'user',
+        roles: [1]
+      }
+    },
+      {
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/segregation/list'),
+        meta: {
+          title: '修改隔离政策',
+          icon: 'user',
+          roles: [1]
+        }
+      }]
+  },
+  {
+    path: '/punch',
+    component: Layout,
+    redirect: 'NoRedirect',
+    meta: {
+      title: '健康打卡',
+      icon: 'user',
+      roles: [1]
+    },
+    children: [{
+      path: 'add',
+      name: 'Add',
+      component: () => import('@/views/punch/add'),
+      meta: {
+        title: '发布打卡',
+        icon: 'user',
+        roles: [1]
+      }
+    },
+      {
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/punch/list'),
+        meta: {
+          title: '题目列表',
+          icon: 'user',
+          roles: [1]
+        }
+      },
+      {
+        path: 'abnormalTemperature',
+        name: 'AbnormalTemperature',
+        component: () => import('@/views/punch/abnormalTemperature'),
+        meta: {
+          title: '体温异常人员',
+          icon: 'user',
+          roles: [1]
+        }
+      },
+      {
+        path: 'abnormalDetails',
+        name: 'AbnormalDetails',
+        hidden: true,
+        component: () => import('@/views/punch/abnormalDetails'),
+        meta: {
+          title: '异常详情',
+          icon: 'user',
+          roles: [1]
+        }
+      }]
+  },
+  {
     path: '/art-manage',
     component: Layout,
     redirect: 'NoRedirect',
-    meta:{
+    meta: {
       title: '文章管理',
       icon: 'user',
       roles: [1]
@@ -186,7 +267,7 @@ export const asyncRoutes = [
       }
     },
       {
-        path:'list',
+        path: 'list',
         name: 'List',
         component: () => import('@/views/article-manage/list'),
         meta: {
@@ -268,12 +349,12 @@ export const asyncRoutes = [
   // },
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  {path: '*', redirect: '/404', hidden: true}
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })
 
