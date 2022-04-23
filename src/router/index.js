@@ -155,6 +155,16 @@ export const asyncRoutes = [
         }
       },
       {
+        path: 'manageAllTravelList',
+        name: 'ManageAllTravelList',
+        component: () => import('@/views/travelApply/manageAllTravelList'),
+        meta: {
+          title: '管理所有申请',
+          icon: 'user',
+          roles: [1]
+        }
+      },
+      {
         path: 'details',
         name: 'Details',
         hidden: true,
@@ -231,6 +241,16 @@ export const asyncRoutes = [
         component: () => import('@/views/punch/abnormalTemperature'),
         meta: {
           title: '体温异常人员',
+          icon: 'user',
+          roles: [1]
+        }
+      },
+      {
+        path: 'abnormalPeopleList',
+        name: 'AbnormalPeopleList',
+        component: () => import('@/views/punch/abnormalPeopleList'),
+        meta: {
+          title: '打卡有异常选项',
           icon: 'user',
           roles: [1]
         }

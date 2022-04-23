@@ -43,3 +43,19 @@ export function getAbnormalDetailsById(params){
     params: params
   })
 }
+
+export function getFocusChoicesUser(params){
+  return request({
+    url:'/api/punch/getFocusChoicesUser',
+    method:'get',
+    params: params
+  })
+}
+
+export function setPunchStatus(params){
+  return request({
+    url:'/api/punch/setPunchStatus',
+    method:'get',
+    params: params
+  })
+}

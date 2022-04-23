@@ -20,8 +20,8 @@
         <el-table-column label="状态" width="80" align="center">
           <template slot-scope="scope">
             <el-tag
-              :type="scope.row.tag === 0 ? 'danger' : 'success'"
-              disable-transitions>{{scope.row.tag?'已处理':'待处理'}}</el-tag>
+              :type="scope.row.status === 1 ? 'success' : 'danger'"
+              disable-transitions>{{scope.row.status === 1?'已处理':'待处理'}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="userName" label="姓名" width="110" align="center" />
@@ -41,16 +41,17 @@
         <el-table-column label="操作" fixed="right" min-width="230">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="handleEdit(scope.row)">查看今日打卡详情</el-button>
-            <el-button type="danger" size="mini" @click="deleteById(scope.row)">删除</el-button>
+            <el-button type="danger" size="mini" @click="deleteById(scope.row)">已处理</el-button>
           </template>
         </el-table-column>
+
       </el-table>
     </div>
   </div>
 </template>
 
 <script>
-import {getAbnormalBodyTemperature} from "@/api/punch";
+import {getAbnormalBodyTemperature, setPunchStatus} from "@/api/punch";
 import utils from "@/utils/tui-utils";
 
 export default {
@@ -75,7 +76,6 @@ export default {
         let data = res.data
         data.map(e =>{
           e.punchDay = utils.formatDate('y-m-d h:i:s', e.punchDay, 2)
-          e.tag = 0
         })
         this.dataList = res.data
         this.$message({
@@ -93,6 +93,25 @@ export default {
           id: row.id
         }
       })
+    },
+    deleteById(row){
+      if (row.status !== 1){
+        setPunchStatus({id:row.id}).then(res => {
+          this.loadData()
+          this.$message({
+            message: '处理成功',
+            type: 'success'
+          })
+        }).catch(err => {
+          console.log(err)
+        })
+      }else {
+        this.$message({
+          message: '已经处理了',
+          type: 'warning'
+        })
+      }
+
     }
   }
 }

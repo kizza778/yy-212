@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <div class="app-container">
     <div class="setting-box">
       <h1>信息审核</h1>
@@ -96,29 +96,139 @@
             </el-image>
           </div>
         </li>
-
+        <li class="item">
+          <span class="label">时间列表</span>
+          <el-timeline>
+              <el-timeline-item v-for="(item,index) in operateList" :key="index" placement="top">
+                <el-card>
+                  <h4>操作: {{item.operate}}</h4>
+                  <p>操作描述: {{item.operateDes}}</p>
+                  <p>发起时间: {{item.operateTime}}</p>
+                  <p>操作人: {{item.operator}}</p>
+                </el-card>
+              </el-timeline-item>
+          </el-timeline>
+        </li>
       </ul>
     </div>
-    <el-button type="success" @click="agree">同意</el-button>
-    <el-button type="danger" @click="disagree">拒绝</el-button>
+    <el-dialog title="发送反馈信息" :visible.sync="dialogFormVisible">
+      <el-form>
+        <el-form-item label="反馈信息" :label-width="formLabelWidth">
+          <el-input v-model="msg" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="sendMessage">确 定</el-button>
+      </div>
+    </el-dialog>
+    <div class="setting-box" v-if="diseaseInfo !== ''">
+      <h1>疾病记录</h1>
+      <ul class="setting-list">
+        <li class="item">
+          <span class="label">姓名</span>
+          <div class="input_wrapper">
+            {{diseaseInfo.name}}
+          </div>
+        </li>
+        <li class="item">
+          <span class="label">年纪</span>
+          <div class="input_wrapper">
+            {{diseaseInfo.age}}
+          </div>
+        </li>
+        <li class="item">
+          <span class="label">联系电话</span>
+          <div class="input_wrapper">
+            {{diseaseInfo.phoneNum}}
+          </div>
+        </li>
+        <li class="item">
+          <span class="label">家庭住址</span>
+          <div class="input_wrapper">
+            {{diseaseInfo.homeAdd}}
+          </div>
+        </li>
+        <li class="item">
+          <span class="label">诊断建议</span>
+          <div class="input_wrapper">
+            {{diseaseInfo.diagnosticAdvice}}
+          </div>
+        </li>
+        <li class="item">
+          <span class="label">健康状态</span>
+          <div class="input_wrapper">
+            {{diseaseInfo.healthStatus?'存在疾病':'健康'}}
+          </div>
+        </li>
+        <li class="item">
+          <span class="label">是否需要常去医院</span>
+          <div class="input_wrapper">
+            {{diseaseInfo.isOftenHospital?'否':'是'}}
+          </div>
+        </li>
+        <li class="item">
+          <span class="label">疾病名</span>
+          <div class="input_wrapper">
+            {{diseaseInfo.nameOfDisease}}
+          </div>
+        </li>
+        <li class="item">
+          <span class="label">常去医院</span>
+          <div class="input_wrapper">
+            {{diseaseInfo.oftenHospital}}
+          </div>
+        </li>
+        <li class="item">
+          <span class="label">附件列表</span>
+          <div class="input_wrapper">
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="diseaseInfo.credential[0]"
+              :preview-src-list="diseaseInfo.credential">
+            </el-image>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div v-if="!isOther">
+      <el-button type="info" @click="dialogFormVisible = true">发送反馈消息</el-button>
+      <el-button type="success" @click="agree">同意</el-button>
+      <el-button type="danger" @click="disagree">拒绝</el-button>
+    </div>
+
   </div>
 </template>
 
 <script>
-import {getTravelApplyInfoById, updateTravelApplyStatus} from "@/api/travel";
+import {
+  getDiseaseInfoByUserId,
+  getTravelApplyInfoById,
+  getTravelOperate,
+  sendMessageToUser,
+  updateTravelApplyStatus
+} from "@/api/travel";
 import utils from "@/utils/tui-utils";
 
 export default {
   name: "details",
   data() {
     return {
+      formLabelWidth: '120px',
+      msg:'',
+      dialogFormVisible: false,
+      isOther: false,
       id: '',
       details: '',
-    }
+      operateList:[],
+      diseaseInfo: ''
+    };
   },
   mounted() {
     this.id = this.$route.query.id
+    this.isOther = this.$route.query.isOther
     this.loadById()
+    this.getOperate()
   },
   methods: {
     loadById() {
@@ -132,6 +242,7 @@ export default {
         result.expectedOutTime = utils.formatDate('y-m-d h:i:s', result.expectedOutTime,2)
         result.expectedReturnTime = utils.formatDate('y-m-d h:i:s', result.expectedReturnTime,2)
         this.details = result
+        this.getDiseaseInfo()
         console.log(result)
       }).catch(err => {
         console.error(err)
@@ -166,8 +277,41 @@ export default {
         this.$message.success('审核失败')
 
       })
+    },
+    sendMessage(){
+      const params = {
+        userId: this.details.userId,
+        msg: this.msg
+      }
+      this.dialogFormVisible = false
+      sendMessageToUser(params).then(res => {
+          this.$message({
+            message: '消息发送成功',
+            type: 'success'
+          })
+        }).catch(err => {
+          console.log(err)
+      })
+    },
+    getOperate(){
+      getTravelOperate({id:this.id}).then(res => {
+        let d = res.data
+        d.map(e => {
+          e.operateTime = utils.formatDate('y-m-d h:i:s', e.operateTime,2)
+        })
+        this.operateList = d
+        console.log(this.operateList)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getDiseaseInfo(){
+      getDiseaseInfoByUserId({id:this.details.userId}).then(res => {
+        this.diseaseInfo = res.data
+      }).catch(err => {
+        console.error(err)
+      })
     }
-
   }
 }
 </script>
@@ -210,6 +354,7 @@ export default {
         line-height: 24px;
         display: flex;
         align-items: center;
+        width: 100%;
 
         .label {
           min-width: 130px;
