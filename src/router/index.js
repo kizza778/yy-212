@@ -207,6 +207,36 @@ export const asyncRoutes = [
       }]
   },
   {
+    path: '/applyMedical',
+    component: Layout,
+    redirect: 'NoRedirect',
+    meta: {
+      title: '就医申请',
+      icon: 'user',
+      roles: [1]
+    },
+    children: [{
+      path: 'list',
+      name: 'List',
+      component: () => import('@/views/apply_medical/list'),
+      meta: {
+        title: '查看所有就医申请',
+        icon: 'user',
+        roles: [1]
+      }
+    },
+      {
+        path: 'detail',
+        name: 'Detail',
+        component: () => import('@/views/apply_medical/detail'),
+        meta: {
+          title: '审核就医申请',
+          icon: 'user',
+          roles: [1]
+        }
+      }]
+  },
+  {
     path: '/punch',
     component: Layout,
     redirect: 'NoRedirect',

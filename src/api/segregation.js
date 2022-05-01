@@ -21,3 +21,7 @@ export function getSegregationById(params){
     params: params
   })
 }
+
+export function keyToAddSegregation(params){
+  return request.post('/api/query/keyToAddSegregation',params)
+}

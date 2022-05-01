@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <el-button @click="openDialog">一键导入中高风险地区隔离政策</el-button>
     <el-table :data="segregationList" border style="width:100%" siz="medium">
       <el-table-column prop="provinces" label="省" width="110" align="center" />
       <el-table-column prop="city" label="市" width="180" align="center" />
@@ -15,17 +16,45 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog title="一键添加隔离政策" :visible.sync="dialogFormVisible">
+      <el-form>
+        <el-form-item label="离开中风险地区1-14天" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="form.midRiskFirstStage" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="离开中风险地区14-28天" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="form.midRiskSecondStage" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="离开高风险地区1-14天" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="form.highRiskFirstStage" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="离开高风险地区14-28天" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="form.highRiskSecondStage" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="sendSegregation">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {deleteSegregationById, getAllSegregation} from "@/api/segregation";
+import {deleteSegregationById, getAllSegregation, keyToAddSegregation} from "@/api/segregation";
 import utils from "@/utils/tui-utils";
 
 export default {
   name: "list",
   data(){
     return{
+      formLabelWidth: '180px',
+      dialogFormVisible: false,
+      form:{
+        midRiskFirstStage: '',
+        midRiskSecondStage: '',
+        highRiskFirstStage: '',
+        highRiskSecondStage: '',
+      },
       segregationList:[],
     }
   },
@@ -61,6 +90,23 @@ export default {
         }
       })
     },
+    openDialog(){
+      this.dialogFormVisible=true
+    },
+    sendSegregation(){
+      const params = {
+        midRiskFirstStage: this.form.midRiskFirstStage,
+        midRiskSecondStage: this.form.midRiskSecondStage,
+        highRiskFirstStage: this.form.highRiskFirstStage,
+        highRiskSecondStage: this.form.highRiskSecondStage
+      }
+      keyToAddSegregation(params).then(res => {
+        this.$message.success('添加成功')
+        this.dialogFormVisible = false
+      }).catch(err => {
+        this.$message.error('添加失败')
+      })
+    }
   }
 }
 </script>

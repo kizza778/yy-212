@@ -6,6 +6,7 @@
     <el-table-column label="操作" fixed="right" min-width="230">
       <template slot-scope="scope">
         <el-button type="primary" size="mini" @click="handleEdit(scope.row)">编辑</el-button>
+        <el-button type="danger" size="mini" @click="deleteArticle(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -33,6 +34,12 @@ export default {
         query: {
           id: row.id
         }
+      })
+    },
+    deleteArticle(row){
+      this.$message({
+        message: '已经处理了',
+        type: 'warning'
       })
     },
     loadData() {
